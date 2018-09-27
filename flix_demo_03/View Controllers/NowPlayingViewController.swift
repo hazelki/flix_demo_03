@@ -14,6 +14,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
 
     
     @IBOutlet weak var tableView: UITableView!
+    
     var movies: [[String: Any]] = []
     
     var refreshControl: UIRefreshControl!
@@ -24,15 +25,15 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         tableView.rowHeight = 200
        
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(NowPlayingViewController.didPullToRefresh(_:)), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(NowPlayingViewController.didPullTheRefresh(_:)), for: .valueChanged)
+        tableView.insertSubview(refreshControl, at: 10)
         
-        tableView.insertSubview(refreshControl, at: 0)
         tableView.dataSource = self
         fetchMovies()
         
     }
     
-    @objc func didPullToRefresh(_ refreshConrol: UIRefreshControl) {
+    @objc func didPullTheRefresh(_ refreshControl: UIRefreshControl) {
        
         fetchMovies()
     }
@@ -81,11 +82,18 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource {
         
         return cell
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     let cell = sender as! UITableViewCell
+        if let indexPath = tableView.indexPath(for: cell) {
+            let movie = movies[indexPath.row]
+        let detailViewController = segue.destination as? DitailViewController
+            detailViewController?.movie = movie
 
-    override func didReceiveMemoryWarning() {
+            func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
-   
-    
     }
-}
+    }
+    }
+    }
